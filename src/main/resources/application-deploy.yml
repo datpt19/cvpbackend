@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: ${CVP_DATABASE:jdbc:postgresql://localhost:5432/backendcvp}
-    username: ${CVP_USERNAME_DB:myuser}
-    password: ${CVP_PASSWORD_DB:mypassword}
+    url: ${CVP_DATABASE:jdbc:postgresql://103.130.213.253:5432/backendcvp}
+    username: ${CVP_USERNAME_DB:cvpuser}
+    password: ${CVP_PASSWORD_DB:Cvp123@}
