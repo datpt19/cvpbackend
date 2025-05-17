@@ -40,7 +40,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input",
                     content = @Content(schema = @Schema(implementation = BaseResponse.class)))
     })
-    @PostMapping(value = "createUser")
+        @PostMapping(value = "createUser")
     public BaseResponse<CreateUserResponse> createUser(@Valid @RequestBody BaseRequest<CreateUserRequest> request) {
         return userService.createUser(request);
     }
