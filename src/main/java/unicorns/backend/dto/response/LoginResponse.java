@@ -1,20 +1,18 @@
 package unicorns.backend.dto.response;
 
+
 public class LoginResponse {
     private String token;
-    private String username;
 
-    public LoginResponse(String token, String username) {
+    public LoginResponse(String token) {
         this.token = token;
-        this.username = username;
     }
 
-    // Getters
     public String getToken() {
         return token;
     }
 
-    public String getUsername() {
-        return username;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

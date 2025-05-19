@@ -15,7 +15,8 @@ public class ApplicationCode {
     public static final int USER_DEACTIVATE = 2;
     public static final int USER_EXITS = 3;
     public static final int INPUT_INVALID = 4;
-
+    public static final int USER_NOT_FOUND = 5;
+    public static final int INVALID_PASSWORD = 6;
 
     private static final Map<Integer, String> msg = new HashMap<>();
 
@@ -25,6 +26,8 @@ public class ApplicationCode {
         msg.put(USER_DEACTIVATE, "USER_DEACTIVATE");
         msg.put(USER_EXITS, "USER_EXITS");
         msg.put(INPUT_INVALID, "INPUT_INVALID");
+        msg.put(USER_NOT_FOUND, "USER_NOT_FOUND");
+        msg.put(INVALID_PASSWORD, "INVALID_PASSWORD");
     }
 
     public static String getMessage(int code, String language) {

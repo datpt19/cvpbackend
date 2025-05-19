@@ -1,33 +1,34 @@
+package unicorns.backend.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import unicorns.backend.dto.request.LoginRequest;
+import unicorns.backend.dto.response.LoginResponse;
+import unicorns.backend.service.AuthService;
+import unicorns.backend.util.ApplicationException;
+
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
-
-            String jwt = jwtTokenProvider.generateToken(authentication);
-            return ResponseEntity.ok(new AuthResponse(jwt));
-
-        } catch (BadCredentialsException ex) {
-            throw new AuthException("Invalid username or password");
-        }
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        String token = jwtTokenProvider.resolveToken(request);
-        // Implement token blacklist here
-        return ResponseEntity.ok().build();
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            String token = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
+            LoginResponse response = new LoginResponse(token);
+            return ResponseEntity.ok(response);
+        } catch (ApplicationException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponse(null));
+        }
     }
 }
