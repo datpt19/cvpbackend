@@ -13,5 +13,4 @@ public class CreateUserResponse {
     String name;
     String email;
     LocalDateTime createdAt;
-
 }

@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import unicorns.backend.dto.UserDto;
 import unicorns.backend.dto.request.BaseRequest;
 import unicorns.backend.dto.request.CreateUserRequest;
 import unicorns.backend.dto.response.BaseResponse;
@@ -24,8 +26,8 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    UserRepository userRepository;
+    @Autowired
+    private     UserRepository userRepository;
 
     @Override
     public BaseResponse<CreateUserResponse> createUser(BaseRequest<CreateUserRequest> request) {
@@ -64,4 +66,20 @@ public class UserServiceImpl implements UserService {
         baseResponse.setWsResponse(createUserResponseList);
         return baseResponse;
     }
+        @Override
+        public UserDto getUserByUsername(String username) {
+            Optional<User> userOptional = userRepository.findByUsername(username);
+            if(!userOptional.isPresent()){
+                throw new ApplicationException(ApplicationCode.USER_NOT_FOUND);
+            }
+            UserDto response = new UserDto();
+            BeanUtils.copyProperties(userOptional.get(), response);
+            return response;
+        }
+
+    @Override
+    public Optional<UserDto> getUserDtoById(int id) {
+        return Optional.empty();
+    }
+
 }
