@@ -16,6 +16,9 @@ public class ApplicationCode {
     public static final int USER_EXITS = 3;
     public static final int INPUT_INVALID = 4;
     public static final int USER_NOT_FOUND = 5;
+    public static final Integer INVALID_OLD_PASSWORD = 6;
+    public static final Integer WRONG_NEW_PASSWORD = 7;
+   public static final Integer INVALID_PASSWORD_FORMAT =8 ;
 
 
     private static final Map<Integer, String> msg = new HashMap<>();

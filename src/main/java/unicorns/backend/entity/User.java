@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 import unicorns.backend.util.Schema;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +22,7 @@ public class User extends BaseEntity {
     String email;
     String name;
     LocalDateTime lastLogin;
-    LocalDateTime dateOfBirth;
+    LocalDate dateOfBirth;
     LocalDateTime passExpireTime;
     Boolean changeFirstPass;
     Integer countFail;

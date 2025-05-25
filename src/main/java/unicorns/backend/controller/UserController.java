@@ -14,8 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unicorns.backend.dto.UserDto;
 import unicorns.backend.dto.request.BaseRequest;
+import unicorns.backend.dto.request.ChangeProfileRequest;
 import unicorns.backend.dto.request.CreateUserRequest;
+import unicorns.backend.dto.request.ChangePasswordRequest;
 import unicorns.backend.dto.response.BaseResponse;
+import unicorns.backend.dto.response.ChangePasswordResponse;
+import unicorns.backend.dto.response.ChangeProfileResponse;
 import unicorns.backend.dto.response.CreateUserResponse;
 import unicorns.backend.service.UserService;
 import unicorns.backend.util.ApplicationCode;
@@ -71,5 +75,24 @@ public class UserController {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
                 });
     }
+    @PutMapping("/changePassword/{username}")
+    public ResponseEntity<?> changePassword(@PathVariable String username,
+                                            @RequestBody BaseRequest<ChangePasswordRequest> request) {
+        BaseResponse<ChangePasswordResponse> response = userService.changePassword(username, request);
+        if (!response.getCode().equals(ApplicationCode.SUCCESS)) {
+            return ResponseEntity.badRequest().body(response.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/changeProfile/{username}")
+    public ResponseEntity<?>changeProfile(@PathVariable String username, @RequestBody BaseRequest<ChangeProfileRequest> request){
+        BaseResponse<ChangeProfileResponse> response=userService.changeProfile(username, request);
+     //   BaseResponse<String> response = userService.changeProfile(username, request);
+        if (!response.getCode().equals(ApplicationCode.SUCCESS)) {
+            return ResponseEntity.badRequest().body(response.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
 }
 
