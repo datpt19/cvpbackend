@@ -9,13 +9,19 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import unicorns.backend.dto.UserDto;
 import unicorns.backend.dto.request.BaseRequest;
 import unicorns.backend.dto.request.CreateUserRequest;
 import unicorns.backend.dto.response.BaseResponse;
 import unicorns.backend.dto.response.CreateUserResponse;
 import unicorns.backend.service.UserService;
+import unicorns.backend.util.ApplicationCode;
 import unicorns.backend.util.Const;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping(Const.PREFIX_USER_V1)
@@ -40,9 +46,30 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Invalid input",
                     content = @Content(schema = @Schema(implementation = BaseResponse.class)))
     })
-    @PostMapping(value = "createUser")
+        @PostMapping(value = "createUser")
     public BaseResponse<CreateUserResponse> createUser(@Valid @RequestBody BaseRequest<CreateUserRequest> request) {
         return userService.createUser(request);
+    }
+       @GetMapping("/{id}")
+    public ResponseEntity<?>getUserById(@PathVariable int id){
+           Optional<UserDto> userOpt = userService.getUserDtoById(id);
+           return userOpt.map(ResponseEntity::ok)
+                   .orElseGet(() -> ResponseEntity.notFound().build());
+       }
+    @GetMapping("/getProfileUser/{username}")
+    public ResponseEntity<BaseResponse<UserDto>> getUserByUsername(@PathVariable String username) {
+        Optional<UserDto> userOpt = Optional.ofNullable(userService.getUserByUsername(username));
+
+        return userOpt
+                .map(user -> {
+                    BaseResponse<UserDto> response = new BaseResponse<>(ApplicationCode.SUCCESS);
+                    response.setWsResponse(user);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> {
+                    BaseResponse<UserDto> response = new BaseResponse<>(ApplicationCode.USER_NOT_FOUND, "User not found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                });
     }
 }
 
